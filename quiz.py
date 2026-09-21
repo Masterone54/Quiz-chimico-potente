@@ -15,6 +15,14 @@ risultati = {
     "Ferro": "**Sei il Ferro: La roccia con troppo stile (Swag)!**\nDuro, resistente e colonna portante del gruppo. Affronti la vita di petto, con uno stile inconfondibile e un carisma magnetico.",
     "Mercurio": "**Sei il Mercurio: La red flag ipnotica!**\nFascino del pericolo in persona. Sfuggente, ipnotico e impossibile da etichettare. Sei bellissimo da guardare, ma chi si avvicina troppo rischia di bruciarsi."
 }
+immagini_risultati = {
+    "Litio": "litio.jpg",
+    "Platino": "platino.jpg",
+    "Argon": "argon.jpg",
+    "Ferro": "ferro.jpg",
+    "Mercurio": "mercurio.jpg"
+}
+
 
 # 3. DOMANDE E RISPOSTE ORIGINALI (Il sistema le mischierà da solo)
 domande = [
@@ -168,5 +176,6 @@ if submitted:
     
     st.success("Test completato!")
     st.title(f"🏆 RISULTATO: {vincitore}")
+    st.image(immagini_risultati[vincitore], use_container_width=True)
     st.write(risultati[vincitore])
     st.balloons()
