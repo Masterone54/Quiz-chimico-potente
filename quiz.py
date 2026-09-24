@@ -87,11 +87,11 @@ st.markdown("""
 
 # 2. DEFINIZIONE DEI RISULTATI
 risultati = {
-    "Litio": "**Sei il Litio: La mina vagante piena di energia!**\nSei una fonte inesauribile di vitalità. Sempre in movimento e con mille progetti, ma attenzione al tuo carattere decisamente esplosivo.",
-    "Platino": "**Sei il Platino: Il risolutore di problemi (Catalizzatore)!**\nRaro, prezioso ed elegante. Sei l'amico che sblocca le situazioni e sprona gli altri a dare il meglio, tirando le fila con classe.",
-    "Argon": "**Sei l'Argon: Il maestro zen imperturbabile!**\nIl re della tranquillità. Non ti mischi mai con i drammi e scivoli via da ogni conflitto. Sei la personificazione assoluta del 'chill'.",
-    "Ferro": "**Sei il Ferro: La roccia con troppo stile (Swag)!**\nDuro, resistente e colonna portante del gruppo. Affronti la vita di petto, con uno stile inconfondibile e un carisma magnetico.",
-    "Mercurio": "**Sei il Mercurio: La red flag ipnotica!**\nFascino del pericolo in persona. Sfuggente, ipnotico e impossibile da etichettare. Sei bellissimo da guardare, ma chi si avvicina troppo rischia di bruciarsi."
+    "Litio": "**Sei il Litio!**\nSei una fonte inesauribile di vitalità. Sempre in movimento e con mille progetti, ma attenzione al tuo carattere decisamente esplosivo.",
+    "Platino": "**Sei il Platino!**\nRaro, prezioso ed elegante. Sei l'amico che sblocca le situazioni e sprona gli altri a dare il meglio.",
+    "Argon": "**Sei l'Argon!**\nIl re della tranquillità. Non ti mischi mai con i drammi e scivoli via da ogni conflitto.",
+    "Ferro": "**Sei il Ferro!**\nDuro, resistente e colonna portante del gruppo. Affronti la vita di petto, con uno stile inconfondibile.",
+    "Mercurio": "**Sei il Mercurio!**\nFascino del pericolo in persona. Sfuggente, ipnotico e impossibile da etichettare."
 }
 immagini_risultati = {
     "Litio": "litio.jpg",
