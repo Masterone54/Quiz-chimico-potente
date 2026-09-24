@@ -2,45 +2,101 @@ import streamlit as st
 import random
 import time
 
+# Grafica pura stile Game Boy Advance / Mystery Dungeon
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
     
-    /* Cambia il font di tutto il sito */
-    html, body, [class*="css"], h1, h2, h3, p, span {
+    /* Font globale per tutto il sito */
+    html, body, [class*="css"], h1, h2, h3, p, span, div, button {
         font-family: 'Press Start 2P', monospace !important;
-        font-size: 14px !important;
     }
     
-    /* Sfondo principale */
+    /* Sfondo completamente nero */
     .stApp {
         background-color: #000000;
-        background-image: radial-gradient(#333333 1px, transparent 1px);
-        background-size: 20px 20px;
     }
 
-    /* Stile del blocco delle domande (il box di dialogo) */
+    /* Nasconde la barra in alto di Streamlit per sembrare un vero gioco */
+    header {
+        display: none !important;
+    }
+
+    /* IL BOX DI DIALOGO: Bordo doppio bianco su sfondo nero */
     [data-testid="stForm"] {
-        background-color: #1a4f8b !important; /* Blu Mystery Dungeon */
+        background-color: #000000 !important;
         border: 4px solid #ffffff !important;
-        border-radius: 10px !important;
-        padding: 20px !important;
-        color: white !important;
-        box-shadow: 5px 5px 0px #000000;
+        border-radius: 8px !important;
+        padding: 25px !important;
+        box-shadow: inset 0 0 0 4px #000000, inset 0 0 0 6px #ffffff;
+        margin-top: 20px;
     }
 
-    /* Testo bianco per le domande */
-    [data-testid="stMarkdownContainer"] p {
-        color: white !important;
-        line-height: 1.8;
+    /* Testo delle domande in Giallo Pokemon */
+    h3 {
+        color: #f8d030 !important; 
+        font-size: 14px !important;
+        line-height: 1.6 !important;
+        margin-bottom: 25px !important;
     }
 
-    /* Stile del bottone finale */
+    /* Testo normale bianco */
+    p {
+        color: #ffffff !important;
+        font-size: 12px !important;
+        line-height: 1.8 !important;
+    }
+
+    /* 1. NASCONDE I PALLINI MODERNI DELLE RISPOSTE */
+    div[role="radiogroup"] > div > label > div:first-of-type {
+        display: none !important;
+    }
+
+    /* 2. STILE DELLE RISPOSTE */
+    div[role="radiogroup"] > div > label {
+        background-color: transparent !important;
+        border: none !important;
+        margin-bottom: 10px !important;
+        padding-left: 20px !important; /* Spazio per la freccetta */
+        position: relative;
+    }
+
+    /* Colore del testo delle risposte */
+    div[role="radiogroup"] > div > label > div:last-of-type {
+        color: #ffffff !important;
+        font-size: 12px !important;
+        transition: 0.1s;
+    }
+
+    /* 3. EFFETTO HOVER: Appare la freccetta e il testo cambia colore */
+    div[role="radiogroup"] > div > label:hover > div:last-of-type {
+        color: #00ffff !important; /* Azzurrino stile selezione GBA */
+    }
+    div[role="radiogroup"] > div > label:hover::before {
+        content: "▶";
+        color: #00ffff !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-size: 12px;
+    }
+
+    /* STILE DEL PULSANTE FINALE (Start) */
     [data-testid="baseButton-secondaryFormSubmit"] {
-        background-color: #ffcc00 !important;
-        color: black !important;
-        border: 2px solid white !important;
-        border-radius: 5px !important;
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 4px solid #ffffff !important;
+        border-radius: 0px !important;
+        font-size: 14px !important;
+        padding: 15px !important;
+        width: 100%;
+        margin-top: 30px;
+        box-shadow: inset 0 0 0 2px #000000, inset 0 0 0 4px #ffffff;
+    }
+    
+    [data-testid="baseButton-secondaryFormSubmit"]:hover {
+        background-color: #ffffff !important;
+        color: #000000 !important;
     }
 </style>
 """, unsafe_allow_html=True)
