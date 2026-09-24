@@ -2,117 +2,87 @@ import streamlit as st
 import random
 import time
 
-# Grafica pura stile Game Boy Advance / Mystery Dungeon
+st.set_page_config(page_title="Quale Elemento Chimico Sei?", page_icon="🧪")
+
+# 1. CSS ESTREMO: Sfondo animato a scorrimento e bottoni stile GBA
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
     
-    /* Font globale per tutto il sito */
-    html, body, [class*="css"], h1, h2, h3, p, span, div, button {
+    html, body, [class*="css"], h1, h2, h3, p, span, button {
         font-family: 'Press Start 2P', monospace !important;
     }
     
-    /* Sfondo completamente nero */
+    header { display: none !important; }
+
+    /* SFONDO PSICHEDELICO ANIMATO (Aura) */
+    @keyframes psych-scroll {
+        0% { background-position: 0 0; }
+        100% { background-position: 100px 100px; }
+    }
+    
     .stApp {
-        background-color: #000000;
+        background-color: #1a0b2e;
+        background-image: repeating-linear-gradient(
+            45deg,
+            #2d1154 25%, transparent 25%, transparent 75%, #2d1154 75%, #2d1154
+        ),
+        repeating-linear-gradient(
+            45deg,
+            #2d1154 25%, #1a0b2e 25%, #1a0b2e 75%, #2d1154 75%, #2d1154
+        );
+        background-position: 0 0, 50px 50px;
+        background-size: 100px 100px;
+        animation: psych-scroll 4s linear infinite;
     }
 
-    /* Nasconde la barra in alto di Streamlit per sembrare un vero gioco */
-    header {
-        display: none !important;
-    }
-
-    /* IL BOX DI DIALOGO: Bordo doppio bianco su sfondo nero */
-    [data-testid="stForm"] {
-        background-color: #000000 !important;
+    /* BOX DELLA DOMANDA (Textbox PMD) */
+    .stApp > header + div {
+        background-color: rgba(0, 0, 0, 0.85) !important;
         border: 4px solid #ffffff !important;
-        border-radius: 8px !important;
-        padding: 25px !important;
-        box-shadow: inset 0 0 0 4px #000000, inset 0 0 0 6px #ffffff;
-        margin-top: 20px;
+        border-radius: 10px !important;
+        padding: 30px !important;
+        margin-top: 10vh !important;
+        box-shadow: inset 0 0 0 4px #000, inset 0 0 0 6px #fff !important;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    /* Testo delle domande in Giallo Pokemon */
     h3 {
         color: #f8d030 !important; 
-        font-size: 14px !important;
-        line-height: 1.6 !important;
-        margin-bottom: 25px !important;
-    }
-
-    /* Testo normale bianco */
-    p {
-        color: #ffffff !important;
-        font-size: 12px !important;
+        font-size: 16px !important;
         line-height: 1.8 !important;
+        margin-bottom: 40px !important;
     }
 
-    /* 1. NASCONDE I PALLINI MODERNI DELLE RISPOSTE */
-    div[role="radiogroup"] > div > label > div:first-of-type {
-        display: none !important;
-    }
-
-    /* 2. STILE DELLE RISPOSTE */
-    div[role="radiogroup"] > div > label {
+    /* TRASFORMA I PULSANTI IN TESTO DI GIOCO */
+    div.stButton > button {
         background-color: transparent !important;
         border: none !important;
-        margin-bottom: 10px !important;
-        padding-left: 20px !important; /* Spazio per la freccetta */
+        color: #ffffff !important;
+        text-align: left !important;
+        display: block !important;
+        width: 100% !important;
+        padding: 10px 10px 10px 30px !important;
+        font-size: 12px !important;
+        box-shadow: none !important;
         position: relative;
     }
-
-    /* Colore del testo delle risposte */
-    div[role="radiogroup"] > div > label > div:last-of-type {
-        color: #ffffff !important;
-        font-size: 12px !important;
-        transition: 0.1s;
+    
+    div.stButton > button:hover {
+        color: #00ffff !important;
     }
-
-    /* 3. EFFETTO HOVER: Appare la freccetta e il testo cambia colore */
-    div[role="radiogroup"] > div > label:hover > div:last-of-type {
-        color: #00ffff !important; /* Azzurrino stile selezione GBA */
-    }
-    div[role="radiogroup"] > div > label:hover::before {
+    
+    div.stButton > button:hover::before {
         content: "▶";
         color: #00ffff !important;
         position: absolute;
-        left: 0;
-        top: 0;
-        font-size: 12px;
-    }
-
-    /* STILE DEL PULSANTE FINALE (Start) */
-    [data-testid="baseButton-secondaryFormSubmit"] {
-        background-color: #000000 !important;
-        color: #ffffff !important;
-        border: 4px solid #ffffff !important;
-        border-radius: 0px !important;
-        font-size: 14px !important;
-        padding: 15px !important;
-        width: 100%;
-        margin-top: 30px;
-        box-shadow: inset 0 0 0 2px #000000, inset 0 0 0 4px #ffffff;
-    }
-    
-    [data-testid="baseButton-secondaryFormSubmit"]:hover {
-        background-color: #ffffff !important;
-        color: #000000 !important;
+        left: 5px;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# 1. CONFIGURAZIONE PAGINA
-def text_animato(testo):
-    for lettera in testo:
-        yield lettera
-        time.sleep(0.03) # Cambia questo numero per renderlo più veloce o più lento
-
-# Mostra il titolo animato (solo se non è già stato mostrato, per evitare che ripeta l'animazione a ogni click)
-if 'intro_fatta' not in st.session_state:
-    st.write_stream(text_animato("Benvenuto. Questo è un portale verso un mondo sconosciuto... \n\nRispondi alle domande sinceramente. Sei pronto?"))
-    st.session_state.intro_fatta = True
-else:
-    st.write("Benvenuto. Questo è un portale verso un mondo sconosciuto... \n\nRispondi alle domande sinceramente. Sei pronto?")
 
 # 2. DEFINIZIONE DEI RISULTATI
 risultati = {
@@ -286,51 +256,55 @@ domande = [
     }
 ]
 
-# 4. LOGICA DI RANDOMIZZAZIONE DELLE RISPOSTE
-if 'shuffled_q' not in st.session_state:
+# 3. MOTORE DI GIOCO (Stato della sessione)
+if 'step' not in st.session_state:
+    st.session_state.step = 0
+    st.session_state.punteggi = {"Litio": 0, "Platino": 0, "Argon": 0, "Ferro": 0, "Mercurio": 0}
+    
+    # Pesca 10 domande casuali all'avvio
     domande_scelte = random.sample(domande, 10)
     shuffled = []
     for d in domande_scelte:
         ops = list(d["opzioni"].items())
-        random.shuffle(ops) # Mischia l'ordine delle risposte
+        random.shuffle(ops) 
         shuffled.append({"domanda": d["domanda"], "opzioni": ops})
-    random.shuffle(shuffled) # Mischia l'ordine delle domande!
     st.session_state.shuffled_q = shuffled
 
-# 5. GENERAZIONE DEL QUIZ IN PAGINA
-punteggi = {"Litio": 0, "Platino": 0, "Argon": 0, "Ferro": 0, "Mercurio": 0}
-risposte_date = []
-
-with st.form("quiz_form"):
-    for i, d in enumerate(st.session_state.shuffled_q):
-        st.subheader(f"{i+1}. {d['domanda']}")
-        # Estrae solo i testi delle opzioni per i radio button
-        testi_opzioni = [opz[0] for opz in d["opzioni"]]
-        scelta = st.radio("Scegli un'opzione:", testi_opzioni, key=f"q_{i}")
-        
-        # Recupera l'elemento collegato all'opzione scelta
-        elemento_scelto = next(opz[1] for opz in d["opzioni"] if opz[0] == scelta)
-        risposte_date.append(elemento_scelto)
-        st.write("---")
-
-    submitted = st.form_submit_button("Scopri il risultato! 🚀")
-
-# 6. CALCOLO E STAMPA DEL RISULTATO
-if submitted:
-    for r in risposte_date:
-        # Controlla se 'r' è una lista di più elementi (es. ["Litio", "Ferro"])
-        if isinstance(r, list): 
-            for elemento in r:
-                punteggi[elemento] += 1
-        # Altrimenti se è un elemento singolo (es. "Argon")
-        else:
-            punteggi[r] += 1
+# 4. RENDER DELLA SCHERMATA CORRENTE
+if st.session_state.step < 10:
+    q = st.session_state.shuffled_q[st.session_state.step]
     
-    # Trova l'elemento con il punteggio massimo
-    vincitore = max(punteggi, key=punteggi.get)
+    # Stampa la domanda
+    st.markdown(f"### {q['domanda']}")
     
-    st.success("Test completato!")
-    st.title(f"🏆 RISULTATO: {vincitore}")
+    # Genera un bottone per ogni risposta possibile
+    for testo_risposta, elementi in q['opzioni']:
+        # Quando l'utente clicca una risposta, esegue questo blocco:
+        if st.button(testo_risposta, key=f"btn_{st.session_state.step}_{testo_risposta}"):
+            if isinstance(elementi, list):
+                for el in elementi:
+                    st.session_state.punteggi[el] += 1
+            else:
+                st.session_state.punteggi[elementi] += 1
+            
+            # Avanza di livello e ricarica istantaneamente la pagina
+            st.session_state.step += 1
+            st.rerun()
+
+else:
+    # 5. SCHERMATA FINALE DEL RISULTATO
+    vincitore = max(st.session_state.punteggi, key=st.session_state.punteggi.get)
+    
+    st.markdown("### L'aura che ti circonda si sta manifestando...")
+    time.sleep(1.5) # Piccola pausa drammatica per l'effetto suspense
+    
+    st.markdown(f"## SEI {vincitore.upper()}!")
     st.image(immagini_risultati[vincitore], use_container_width=True)
-    st.write(risultati[vincitore])
-    st.balloons()
+    st.markdown(f"<p>{risultati[vincitore]}</p>", unsafe_allow_html=True)
+    
+    # Bottone per rigiocare
+    st.write("---")
+    if st.button("Ricomincia l'esplorazione"):
+        for key in st.session_state.keys():
+            del st.session_state[key]
+        st.rerun()
