@@ -1,11 +1,62 @@
 import streamlit as st
 import random
+import time
+
+st.markdown("""
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    
+    /* Cambia il font di tutto il sito */
+    html, body, [class*="css"], h1, h2, h3, p, span {
+        font-family: 'Press Start 2P', monospace !important;
+        font-size: 14px !important;
+    }
+    
+    /* Sfondo principale */
+    .stApp {
+        background-color: #000000;
+        background-image: radial-gradient(#333333 1px, transparent 1px);
+        background-size: 20px 20px;
+    }
+
+    /* Stile del blocco delle domande (il box di dialogo) */
+    [data-testid="stForm"] {
+        background-color: #1a4f8b !important; /* Blu Mystery Dungeon */
+        border: 4px solid #ffffff !important;
+        border-radius: 10px !important;
+        padding: 20px !important;
+        color: white !important;
+        box-shadow: 5px 5px 0px #000000;
+    }
+
+    /* Testo bianco per le domande */
+    [data-testid="stMarkdownContainer"] p {
+        color: white !important;
+        line-height: 1.8;
+    }
+
+    /* Stile del bottone finale */
+    [data-testid="baseButton-secondaryFormSubmit"] {
+        background-color: #ffcc00 !important;
+        color: black !important;
+        border: 2px solid white !important;
+        border-radius: 5px !important;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # 1. CONFIGURAZIONE PAGINA
-st.set_page_config(page_title="Quale Elemento Chimico Sei?", page_icon="🧪")
+def text_animato(testo):
+    for lettera in testo:
+        yield lettera
+        time.sleep(0.03) # Cambia questo numero per renderlo più veloce o più lento
 
-st.title("🧪 Quale Elemento Chimico Sei?")
-st.write("Scopri la tua personalità scientifica in poche domande!")
+# Mostra il titolo animato (solo se non è già stato mostrato, per evitare che ripeta l'animazione a ogni click)
+if 'intro_fatta' not in st.session_state:
+    st.write_stream(text_animato("Benvenuto. Questo è un portale verso un mondo sconosciuto... \n\nRispondi alle domande sinceramente. Sei pronto?"))
+    st.session_state.intro_fatta = True
+else:
+    st.write("Benvenuto. Questo è un portale verso un mondo sconosciuto... \n\nRispondi alle domande sinceramente. Sei pronto?")
 
 # 2. DEFINIZIONE DEI RISULTATI
 risultati = {
