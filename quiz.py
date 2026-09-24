@@ -11,6 +11,7 @@ st.markdown("""
     
     html, body, [class*="css"], h1, h2, h3, p, span, button {
         font-family: 'Press Start 2P', monospace !important;
+        color: #ffffff !important;
     }
     
     header { display: none !important; }
