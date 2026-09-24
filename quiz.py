@@ -183,7 +183,7 @@ domande = [
 if 'shuffled_q' not in st.session_state:
     domande_scelte = random.sample(domande, 10)
     shuffled = []
-    for d in domande:
+    for d in domande_scelte:
         ops = list(d["opzioni"].items())
         random.shuffle(ops) # Mischia l'ordine delle risposte
         shuffled.append({"domanda": d["domanda"], "opzioni": ops})
